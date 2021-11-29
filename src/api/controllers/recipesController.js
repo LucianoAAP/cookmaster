@@ -38,9 +38,17 @@ const update = async (req, res, next) => {
   return res.status(200).json(recipe);
 };
 
+const remove = async (req, res, next) => {
+  const { id } = req.params;
+  const recipe = await recipesService.remove(id, req.user);
+  if (recipe.err) return next(recipe.err);
+  return res.status(204).json();
+};
+
 module.exports = {
   findAll,
   findById,
   create,
   update,
+  remove,
 };
