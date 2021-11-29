@@ -4,9 +4,9 @@ const findAll = async () => (connection.connect()
   .then((db) => db.collection('users').find().toArray()));
 
 const create = async ({ email, password, name, role }) => {
-  const nameData = await connection.connect()
+  const user = await connection.connect()
     .then((db) => db.collection('users').findOne({ email }));
-  if (nameData) return null;
+  if (user) return null;
   return connection.connect().then((db) => db.collection('users').insertOne({
     email,
     password,
