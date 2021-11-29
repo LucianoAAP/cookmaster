@@ -12,6 +12,13 @@ const findAll = async (_req, res) => {
   return res.status(200).json(recipes);
 };
 
+const findById = async (req, res, next) => {
+  const { id } = req.params;
+  const recipe = await recipesService.findById(id);
+  if (recipe.err) return next(recipe.err);
+  return res.status(200).json(recipe);
+};
+
 const create = async (req, res, next) => {
   const { name, ingredients, preparation } = req.body;
   const { _id: userId } = req.user;
@@ -24,5 +31,6 @@ const create = async (req, res, next) => {
 
 module.exports = {
   findAll,
+  findById,
   create,
 };
