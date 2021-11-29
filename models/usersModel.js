@@ -1,8 +1,5 @@
 const connection = require('./connection');
 
-const findAll = async () => (connection.connect()
-  .then((db) => db.collection('users').find().toArray()));
-
 const create = async ({ email, password, name, role }) => {
   const user = await connection.connect()
     .then((db) => db.collection('users').findOne({ email }));
@@ -16,6 +13,5 @@ const create = async ({ email, password, name, role }) => {
 };
 
 module.exports = {
-  findAll,
   create,
 };

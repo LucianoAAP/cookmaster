@@ -14,6 +14,8 @@ app.use('/users', require('../../routers/usersRouter'));
 
 app.use('/login', require('../../routers/loginRouter'));
 
+app.use('/recipes', require('../../routers/recipesRouter'));
+
 app.use(errorMiddleware);
 
 module.exports = app;
