@@ -7,6 +7,11 @@ const validateEntries = (name, ingredients, preparation) => {
   return 'OK';
 };
 
+const findAll = async (_req, res) => {
+  const recipes = await recipesService.findAll();
+  return res.status(200).json(recipes);
+};
+
 const create = async (req, res, next) => {
   const { name, ingredients, preparation } = req.body;
   const { _id: userId } = req.user;
@@ -18,5 +23,6 @@ const create = async (req, res, next) => {
 };
 
 module.exports = {
+  findAll,
   create,
 };
