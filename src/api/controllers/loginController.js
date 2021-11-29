@@ -1,4 +1,3 @@
-const rescue = require('express-rescue');
 const jwt = require('jsonwebtoken');
 const loginService = require('../services/loginService');
 
@@ -11,7 +10,7 @@ const validateEntries = (email, password) => {
   return 'OK';
 };
 
-module.exports = rescue(async (req, res, next) => {
+module.exports = async (req, res, next) => {
   const { email, password } = req.body;
   const entriesValidation = validateEntries(email, password);
   if (entriesValidation.err) return next(entriesValidation.err);
@@ -22,4 +21,4 @@ module.exports = rescue(async (req, res, next) => {
   const payload = { _id, email, role };
   const token = jwt.sign(payload, secret, jwtConfig);
   return res.status(200).json({ token });
-});
+};

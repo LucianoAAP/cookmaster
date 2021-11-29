@@ -4,7 +4,7 @@ const secret = 'xablau';
 
 module.exports = (req, _res, next) => {
   const token = req.headers.authorization;
-  if (!token) return next({ statusCode: 401, message: 'Token not found' });
+  if (!token) return next({ status: 401, message: 'missing auth token' });
   try {
     const payload = jwt.verify(token, secret);
     req.user = payload;
