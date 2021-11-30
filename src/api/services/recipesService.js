@@ -17,7 +17,7 @@ const update = async (id, entries, user) => {
   if (role !== 'admin' && _id !== recipe.userId) {
     return { err: { status: 401, message: 'unauthorized action' } };
   }
-  return recipesModel.update(id, entries, _id);
+  return recipesModel.update(id, entries);
 };
 
 const remove = async (id, user) => {

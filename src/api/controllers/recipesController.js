@@ -29,11 +29,17 @@ const create = async (req, res, next) => {
 };
 
 const update = async (req, res, next) => {
-  if (req.user.err) return next(req.user.err);
   const { id } = req.params;
-  const entriesValidation = validateEntries(req.body);
-  if (entriesValidation.err) return next(entriesValidation.err);
   const recipe = await recipesService.update(id, req.body, req.user);
+  if (recipe.err) return next(recipe.err);
+  return res.status(200).json(recipe);
+};
+
+const addImage = async (req, res, next) => {
+  if (req.validFileError) return next(req.validFileError);
+  const { id } = req.params;
+  const image = `localhost:3000/src/uploads/${id}.jpeg`;
+  const recipe = await recipesService.update(id, { image }, req.user);
   if (recipe.err) return next(recipe.err);
   return res.status(200).json(recipe);
 };
@@ -50,5 +56,6 @@ module.exports = {
   findById,
   create,
   update,
+  addImage,
   remove,
 };

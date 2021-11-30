@@ -20,12 +20,12 @@ const create = async ({ name, ingredients, preparation, userId }) => (connection
       userId,
     })).then((result) => ({ name, ingredients, preparation, _id: result.insertedId })));
 
-const update = async (id, entries, userId) => {
+const update = async (id, entries) => {
   await connection.connect().then((db) => db.collection('recipes').updateOne(
     { _id: ObjectId(id) },
     { $set: { ...entries } },
   ));
-  return { _id: id, ...entries, userId };
+  return findById(id);
 };
 
 const remove = async (id) => {
