@@ -18,7 +18,7 @@ const create = async ({ name, ingredients, preparation, userId }) => (connection
       ingredients,
       preparation,
       userId,
-    })).then((result) => ({ name, ingredients, preparation, _id: result.insertedId })));
+    })).then((result) => ({ name, ingredients, preparation, userId, _id: result.insertedId })));
 
 const update = async (id, entries) => {
   await connection.connect().then((db) => db.collection('recipes').updateOne(
