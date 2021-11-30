@@ -12,7 +12,7 @@ const create = async (entries) => recipesModel.create(entries);
 
 const update = async (id, entries, user) => {
   const recipe = await findById(id);
-  if (!recipe) return recipe;
+  if (recipe.err) return recipe;
   const { _id, role } = user;
   if (role !== 'admin' && _id !== recipe.userId) {
     return { err: { status: 401, message: 'unauthorized action' } };
