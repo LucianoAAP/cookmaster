@@ -25,6 +25,7 @@ const getConnection = async () => {
 describe('Testa create de users', () => {
   describe('Quando as entradas são inválidas', () => {
     let response = {};
+    let createdUser = {};
 
     before(async () => {
       const connectionMock = await getConnection().then((conn) => conn.db('Cookmaster'));
@@ -36,11 +37,18 @@ describe('Testa create de users', () => {
           email: 'erickjaquin@gmail.com',
           password: '12345678',
         });
+
+      createdUser = await connectionMock.collection('users')
+        .findOne({ email: 'erickjaquin@gmail.com' });
     });
 
     after(async () => {
       mongoConnection.connect.restore();
       await DBServer.stop();
+    });
+
+    it('Não cria usuário no banco', async () => {
+      expect(createdUser).to.be.null;
     });
 
     it('Retorna a mensagem de erro correta', () => {
@@ -51,6 +59,7 @@ describe('Testa create de users', () => {
 
   describe('Quando o usuário já existe', () => {
     let response = {};
+    let users = {};
 
     before(async () => {
       const connectionMock = await getConnection().then((conn) => conn.db('jwt_exercise'));
@@ -72,11 +81,17 @@ describe('Testa create de users', () => {
           password: '12345678',
           name: 'Erick Jacquin',
         });
+
+      users = await connectionMock.collection('users').find().toArray();
     });
 
     after(async () => {
       mongoConnection.connect.restore();
       await DBServer.stop();
+    });
+
+    it('Não cria usuário no banco', async () => {
+      expect(users.length).to.be.equal(1);
     });
 
     it('Retorna a mensagem de erro correta', () => {
@@ -87,6 +102,7 @@ describe('Testa create de users', () => {
 
   describe('Quando cadastra com sucesso', () => {
     let response = {};
+    let createdUser = {};
 
     before(async () => {
       const connectionMock = await getConnection().then((conn) => conn.db('jwt_exercise'));
@@ -100,11 +116,17 @@ describe('Testa create de users', () => {
           password: '12345678',
           name: 'Erick Jacquin',
         });
+      
+      createdUser = await connectionMock.collection('users').findOne({ name: 'Erick Jacquin' });
     });
 
     after(async () => {
       mongoConnection.connect.restore();
       await DBServer.stop();
+    });
+
+    it('Cria usuário no banco', async () => {
+      expect(createdUser).to.be.not.null;
     });
 
     it('Retorna a resposta correta', () => {

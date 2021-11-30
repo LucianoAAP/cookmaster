@@ -12,8 +12,6 @@ const { expect } = chai;
 
 const DBServer = new MongoMemoryServer();
 
-const BANANA_ID = '61a5be249f88de5e287012ef';
-
 const getConnection = async () => {
   const URLMock = await DBServer.getUri();
   const OPTIONS = {
@@ -33,7 +31,7 @@ describe('Testa create de recipes', () => {
   
       sinon.stub(mongoConnection, 'connect').resolves(connectionMock);
 
-      response = await chai.request(server).post(`/recipes`);
+      response = await chai.request(server).post('/recipes');
     });
   
     after(async () => {
@@ -49,6 +47,7 @@ describe('Testa create de recipes', () => {
 
   describe('Quando as entradas são inválidas', () => {
     let response = {};
+    let createdRecipe = {};
   
     before(async () => {
       const connectionMock = await getConnection().then((conn) => conn.db('Cookmaster'));
@@ -65,16 +64,22 @@ describe('Testa create de recipes', () => {
           password: 'admin',
         }).then((res) => res.body.token);
 
-      response = await chai.request(server).post(`/recipes`)
+      response = await chai.request(server).post('/recipes')
         .send({
           name: 'banana caramelizada',
           ingredients: 'banana, açúcar',
         }).set('authorization', token);
+
+      createdRecipe = await connectionMock.collection('recipes').findOne({ name: 'banana caramelizada' });
     });
   
     after(async () => {
       mongoConnection.connect.restore();
       await DBServer.stop();
+    });
+
+    it('Não cria receita no banco', async () => {
+      expect(createdRecipe).to.be.null;
     });
   
     it('Retorna a mensagem de erro correta', () => {
@@ -85,6 +90,7 @@ describe('Testa create de recipes', () => {
   
   describe('Quando é criada com sucesso', () => {
     let response = {};
+    let createdRecipe = {};
   
     before(async () => {
       const connectionMock = await getConnection().then((conn) => conn.db('Cookmaster'));
@@ -101,17 +107,23 @@ describe('Testa create de recipes', () => {
           password: 'admin',
         }).then((res) => res.body.token);
 
-      response = await chai.request(server).post(`/recipes`)
+      response = await chai.request(server).post('/recipes')
         .send({
           name: 'banana caramelizada',
           ingredients: 'banana, açúcar',
           preparation: 'coloque o açúcar na frigideira até virar caramelo e jogue a banana',
         }).set('authorization', token);
+
+      createdRecipe = await connectionMock.collection('recipes').findOne({ name: 'banana caramelizada' });
     });
   
     after(async () => {
       mongoConnection.connect.restore();
       await DBServer.stop();
+    });
+
+    it('Cria receita no banco', async () => {
+      expect(createdRecipe).to.be.not.null;
     });
   
     it('Retorna a resposta correta', () => {

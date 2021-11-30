@@ -93,17 +93,16 @@ describe('Testa createAdmin de users', () => {
 
   describe('Quando as entradas são inválidas', () => {
     let response = {};
+    let createdUser = {};
 
     before(async () => {
       const connectionMock = await getConnection().then((conn) => conn.db('Cookmaster'));
 
       sinon.stub(mongoConnection, 'connect').resolves(connectionMock);
 
-      const users = [
-        { name: 'admin', email: 'root@email.com', password: 'admin', role: 'admin' }
-      ];
+      const user = { name: 'admin', email: 'root@email.com', password: 'admin', role: 'admin' };
 
-      await connectionMock.collection('users').insertMany(users);
+      await connectionMock.collection('users').insertOne(user);
 
       const token = await chai.request(server).post('/login')
         .send({
@@ -117,11 +116,18 @@ describe('Testa createAdmin de users', () => {
           email: 'erickjaquin@gmail.com',
           password: '12345678',
         }).set('authorization', token);
+
+        createdUser = await connectionMock.collection('users')
+          .findOne({ email: 'erickjaquin@gmail.com' });
     });
 
     after(async () => {
       mongoConnection.connect.restore();
       await DBServer.stop();
+    });
+
+    it('Não cria usuário no banco', async () => {
+      expect(createdUser).to.be.null;
     });
 
     it('Retorna a mensagem de erro correta', () => {
@@ -173,17 +179,16 @@ describe('Testa createAdmin de users', () => {
 
   describe('Quando cadastra com sucesso', () => {
     let response = {};
+    let createdUser = {};
 
     before(async () => {
       const connectionMock = await getConnection().then((conn) => conn.db('Cookmaster'));
 
       sinon.stub(mongoConnection, 'connect').resolves(connectionMock);
 
-      const users = [
-        { name: 'admin', email: 'root@email.com', password: 'admin', role: 'admin' }
-      ];
+      const user = { name: 'admin', email: 'root@email.com', password: 'admin', role: 'admin' };
 
-      await connectionMock.collection('users').insertMany(users);
+      await connectionMock.collection('users').insertOne(user);
 
       const token = await chai.request(server).post('/login')
         .send({
@@ -198,11 +203,17 @@ describe('Testa createAdmin de users', () => {
           password: '12345678',
           name: 'Erick Jacquin',
         }).set('authorization', token);
+      
+        createdUser = await connectionMock.collection('users').findOne({ name: 'Erick Jacquin' });
     });
 
     after(async () => {
       mongoConnection.connect.restore();
       await DBServer.stop();
+    });
+
+    it('Cria usuário no banco', async () => {
+      expect(createdUser).to.be.not.null;
     });
 
     it('Retorna a resposta correta', () => {
