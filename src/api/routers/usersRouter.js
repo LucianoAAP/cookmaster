@@ -1,9 +1,11 @@
 const express = require('express');
 const rescue = require('express-rescue');
-const { create } = require('../controllers/usersController');
+const authentication = require('../middlewares/auth');
+const { create, createAdmin } = require('../controllers/usersController');
 
 const router = express.Router();
 
 router.post('/', rescue(create));
+router.post('/admin', authentication, rescue(createAdmin));
 
 module.exports = router;

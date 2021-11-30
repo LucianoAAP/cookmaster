@@ -19,6 +19,17 @@ const create = async (req, res, next) => {
   return res.status(201).json({ user });
 };
 
+const createAdmin = async (req, res, next) => {
+  const { email, password, name } = req.body;
+  const role = 'admin';
+  const entriesValidation = validateEntries(email, password, name);
+  if (entriesValidation.err) return next(entriesValidation.err);
+  const user = await usersServive.createAdmin({ email, password, name, role }, req.user);
+  if (user.err) return next(user.err);
+  return res.status(201).json({ user });
+};
+
 module.exports = {
   create,
+  createAdmin,
 };
