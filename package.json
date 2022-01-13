@@ -4,12 +4,11 @@
   "description": "Você já usa o GitHub diariamente para desenvolver os exercícios, certo? Agora, para desenvolver os projetos, você deverá seguir as instruções a seguir. Fique atento a cada passo, e se tiver qualquer dúvida, nos envie por Slack! #vqv 🚀",
   "main": "./src/api/server.js",
   "scripts": {
-    "test": "jest --runInBand --detectOpenHandles --forceExit",
     "start": "node .",
     "dev": "nodemon .",
-    "dev:test": "mocha ./src/integration-tests/**/*$NAME*.{test,spec}.js --exit",
-    "dev:test:coverage": "nyc --all npm run dev:test",
-    "dev:test:coverage:json": "nyc --all --reporter=json-summary npm run dev:test",
+    "test": "mocha ./tests/**/*$NAME*.{test,spec}.js --exit",
+    "test:coverage": "nyc --all npm test",
+    "test:coverage:json": "nyc --all --reporter=json-summary npm test",
     "lint": "eslint --no-inline-config --ext .js,.jsx --no-error-on-unmatched-pattern -c .eslintrc.json ."
   },
   "repository": {

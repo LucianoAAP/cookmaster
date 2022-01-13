@@ -3,9 +3,9 @@ const chaiHttp = require('chai-http');
 const sinon = require('sinon');
 const { MongoClient } = require('mongodb');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const server = require('../api/app');
 const { ObjectId } = require('mongodb');
-const mongoConnection = require('../api/models/connection');
+const server = require('../src/api/app');
+const mongoConnection = require('../src/api/models/connection');
 
 chai.use(chaiHttp);
 

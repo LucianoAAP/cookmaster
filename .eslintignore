@@ -1,4 +1,4 @@
 node_modules
-test
+tests
 src/integration-tests/
 seed.js
