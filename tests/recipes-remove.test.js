@@ -102,7 +102,7 @@ describe('Testa remove de recipes', () => {
     });
   });
 
-  describe('Quando não está autorizado', () => {
+  describe('Quando está autorizado', () => {
     let response = {};
     let recipeData = {};
   
