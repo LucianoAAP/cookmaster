@@ -136,7 +136,7 @@ describe('Testa update de recipes', () => {
       expect(recipeData).to.be.not.null;
     });
   
-    it('Retorna a mensagem de erro correta', () => {
+    it('Retorna a receita correta', () => {
       expect(response).to.have.status(200);
       expect(response.body).to.be.deep.equal({
         _id: CHICKEN_ID,
