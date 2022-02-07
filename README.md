@@ -32,7 +32,10 @@ This project requires Node.js and MongoDB.
 
 ## Starting the application
 
-Just run `npm start`
+1. First, start your MongoDB service:
+- `sudo service mongod start`
+2. Then, just run the application
+- `npm start`
 
 ## Testing the application
 
