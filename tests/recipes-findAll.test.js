@@ -25,7 +25,7 @@ const getConnection = async () => {
 };
 
 describe('Testa findAll de recipes', () => {
-  let response = {};
+  let response = [];
   const recipe = {
     _id: BANANA_ID,
     name: 'banana caramelizada',
